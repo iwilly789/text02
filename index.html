@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>경주 — 천년의 고도</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* =============================================
+       🎨 색상 & 폰트 설정
+       ============================================= */
+    :root {
+      --bg:           #f7f4ef;
+      --bg-dark:      #1c1814;
+      --text:         #2a2118;
+      --accenttt:       #8ff0c0;
+      --accentt:       #eb9927;
+      --accent:       #e9cca4;
+      --accent-light: #e8ddd0;
+      --white:        #fdfcfa;
+      --muted:        #9a8c7e;
+      --nav-hover:    #d6ba91; /* 메뉴 호버용 주황색 추가 */
+
+      --font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      --font-body:    'Noto Serif KR', serif;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+    
+
+    /* =============================================
+       ✨ 상단 내비게이션 (수정됨)
+       ============================================= */
+        nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 48px;
+      mix-blend-mode: normal;
+      /* 스크롤 시 배경이 보일 수 있도록 살짝 어둡게 처리하거나 투명 유지 */
+      background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: #fff;
+      letter-spacing: 0.15em;
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    /* 메뉴 리스트 구조 */
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    /* 메뉴 링크 기본 스타일 */
+    .nav-link {
+      text-decoration: none;
+      color: rgba(255,255,255,0.8);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      padding: 8px 0;
+      display: inline-block;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* [기능 1] 마우스를 올리면 글자 크기 살짝 키워짐 & 색상 변경 */
+    .nav-link:hover {
+      color: var(--white);
+      transform: scale(1.1);
+    }
+
+    /* [기능 2] 마우스를 올리면 주황색 가로바가 생김 */
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background-color: var(--nav-hover);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* =============================================
+       🖼️ 히어로 섹션
+       ============================================= */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      display: grid;
+      place-items: end start;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('imgs/Gemini_Generated_Image_gxzomhgxzomhgxzo.png');
+      background-size: cover;
+      background-position: center 30%;
+      animation: zoomIn 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1); }
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(20,15,10,0.72) 0%, rgba(20,15,10,0.1) 65%),
+        linear-gradient(to top, rgba(20,15,10,0.5) 0%, transparent 50%);
+    }
+
+    .hero-content {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      text-align: center;
+      bottom: 15%;
+      z-index: 2;
+      padding: 0 56px 80px;
+      max-width: 700px;
+    }
+
+    .hero-eyebrow {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeRight 0.9s 0.6s forwards;
+    }
+
+    .hero-eyebrow-line {
+      width: 36px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .hero-eyebrow-text {
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeRight 0.9s 0.8s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #dabc7d;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.8;
+      max-width: 100%;
+      opacity: 0;
+      animation: fadeRight 0.9s 1s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      right: 56px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll-bar {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollBar 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollBar {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50%       { transform: scaleY(1.4); opacity: 1; }
+    }
+
+    /* =============================================
+       📝 소개 섹션
+       ============================================= */
+    .intro {
+      padding: 110px 48px 90px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .intro-left {
+      position: sticky;
+      top: 120px;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .intro-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .intro-title strong {
+      display: block;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .intro-text {
+      font-size: 1rem;
+      line-height: 2;
+      color: #5a4e42;
+      margin-bottom: 28px;
+    }
+
+    .intro-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--accent-light);
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* =============================================
+       🗺️ 주요 명소 카드 섹션
+       ============================================= */
+    .spots {
+      padding: 80px 48px 110px;
+      background-image: url('imgs/Gemini_Generated_Image_sauozssauozssauo.png');
+      position: relative;
+    }
+
+    .spots::before {
+      content: '慶州';
+      position: absolute;
+      top: 40px;
+      right: 60px;
+      font-family: var(--font-display);
+      font-size: 10rem;
+      color: rgba(255,255,255,0.025);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .spots-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+
+    .spots-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--white);
+      margin-top: 14px;
+    }
+
+    .spots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .spot-card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      cursor: pointer;
+    }
+
+    .spot-card:first-child {
+      grid-row:
+      aspect-ratio: auto;
+    }
+
+    .spot-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      display: block;
+    }
+
+    .spot-card:hover .spot-img {
+      transform: scale(1.06);
+    }
+
+    .spot-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15,10,5,0.85) 0%, rgba(15,10,5,0.1) 50%, transparent 100%);
+      transition: opacity 0.4s;
+    }
+
+    .spot-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 28px;
+      transform: translateY(8px);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .spot-card:hover .spot-info { transform: translateY(0); }
+
+    .spot-category {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .spot-name {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .spot-desc {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .spot-card:hover .spot-desc { max-height: 100px; }
+
+
+      /* =============================================
+       💡 여행 팁 섹션
+       ============================================= */
+.tips {
+  padding: 80px 48px; /* 위아래 여백을 살짝 줄여 컴팩트하게 변경 */
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.tips-header {
+  margin-bottom: 50px;
+}
+
+.tips-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  line-height: 1.25;
+  margin-top: 12px;
+  max-width: 600px;
+  color: var(--text);
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px; /* 선을 더 가늘게 하여 세련된 느낌 강조 */
+  background: var(--accent-light);
+}
+
+/* ✏️ [수정] 세로 길이를 가로보다 짧게 조정한 레이아웃 */
+.tip-item {
+  padding: 40px 50px; /* 좌우 여백을 넓혀 텍스트 응집력 향상 */
+  background: var(--white);
+  transition: background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  /* 핵심: 세로 길이를 가로의 약 65% 정도로 설정 (와이드 비율) */
+  aspect-ratio: 1.6 / 1; 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 호버 시 왼쪽 포인트 라인 */
+.tip-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 0;
+  background: var(--accentt); /* 조금 더 진한 주황색 포인트 */
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tip-item:hover::before { height: 100%; }
+.tip-item:hover { background: #faf8f5; }
+
+.tip-number {
+  font-family: var(--font-display);
+  font-size: 2rem; /* 사이즈를 살짝 줄여 여백 확보 */
+  color: var(--accent);
+  opacity: 0.6;
+  margin-bottom: 15px;
+}
+
+.tip-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.tip-text {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.7;
+  word-break: keep-all;
+  /* 텍스트가 넘치지 않도록 최대 높이 설정 가능 */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 세로가 짧아졌으므로 최대 3줄까지만 표시 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 모바일 대응 */
+@media (max-width: 900px) {
+  .tip-item {
+    aspect-ratio: 2 / 1; /* 테블릿에서는 더 가로로 길게 */
+    padding: 30px 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+  .tip-item {
+    aspect-ratio: auto; /* 모바일은 내용에 맞춤 */
+    padding: 40px;
+  }
+}
+
+    /* =============================================
+       📞 예약/문의 CTA 섹션
+       ============================================= */
+    .cta {
+      position: relative;
+      overflow: hidden;
+      background-image: url('imgs/Gemini_Generated_Image_sauozssauozssauo.png');
+      padding: 130px 48px;
+      text-align: center;
+    }
+
+    .cta-inner { position: relative; z-index: 1; }
+
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+        .cta-sub {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 56px;
+      letter-spacing: 0.03em;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 44px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-primary {
+      background: var(--accentt);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #a07c4e;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(139,108,66,0.35);
+    }
+
+    .btn-ghost {
+      background: var(--accenttt);
+      color: var(--white);
+    }
+
+    .btn-ghost:hover {
+      background: #a07c4e;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(139,108,66,0.35);
+    }
+    /* =============================================
+       📌 푸터
+       ============================================= */
+    footer {
+      background: #110e0b;
+      padding: 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes fadeRight {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* =============================================
+       반응형 (모바일)
+       ============================================= */
+    @media (max-width: 768px) {
+      nav { 
+        padding: 20px 24px; 
+        flex-direction: column;
+        gap: 15px;
+      }
+      .nav-list { gap: 15px; }
+      .nav-link { font-size: 0.8rem; }
+      
+      .hero-content { padding: 0 24px 60px; }
+      .intro { grid-template-columns: 1fr; padding: 70px 24px; }
+      .spots { padding: 70px 24px; }
+      .spots-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#">THE MUDEUNGSAN DALBIT</a>
+    <ul class="nav-list">
+      <li class="nav-item"><a href="#intro" class="nav-link">오시는 길</a></li>
+      <li class="nav-item"><a href="#spots" class="nav-link">야경의 미</a></li>
+      <li class="nav-item"><a href="#tips" class="nav-link">광주의 맛</a></li>
+      <li class="nav-item"><a href="#cta" class="nav-link">축제소식</a></li> 
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Kwangjoo, Korea</span>
+        <div class="hero-eyebrow-line"></div>
+      </div>
+<h1 style="
+    font-family: 'Jalnan2', sans-serif; 
+    color: #fdfcfa; 
+    line-height: 1.2; 
+    text-align: center; 
+    margin-bottom: 30px;
+">
+    <span style="font-size: 3em; color: #f7f2b8; letter-spacing: -1px;">무등산</span><br/>
+    <em style="
+        font-style: normal; 
+        color: #EBDDB3; 
+        font-size: 3em; 
+        text-shadow: 0 0 15px rgba(235, 221, 179, 0.6), 2px 2px 4px rgba(0,0,0,0.3);
+    ">달빛 야시장</em>
+</h1>
+      <p class="hero-sub">무등산 자락의 달빛 아래, 쏟아지는 빛빛과 감미로운 버스킹이 흐르는곳</br>
+시간: 4월 매주 토,일요일 </p>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-bar"></div><span>Scroll</span></div>
+  </section>
+
+  <section id="intro" class="intro">
+    <div class="intro-left">
+      <p class="section-label">About</p>
+      <h2 class="intro-title">무등산의 달빛이<br/>당신의 밤으로 </br>내려앉는 순간 </h2>
+    </div>
+    <div class="intro-right">
+      <p class="intro-text">광주의 영산, 무등산 자락 아래 펼쳐지는 달빛 야시장은 도심의 소음에서 벗어나 별빛과 미식, 그리고 낭만이 어우러지는 특별한 공간입니다. 은은한 달빛 아래 정겨운 사람들과 나누는 맛있는 음식과 감미로운 버스킹 공연은 오직 이곳에서만 느낄 수 있는 밤의 서사입니다. 시간이 멈춘 듯 평온한 무등산의 밤, 당신만의 소중한 이야기를 기록해 보세요.</p>
+      <div class="intro-stats">
+        <div class="stat"><div class="stat-number">⛰️ 1,187m</div><div class="stat-label">광주의 자부심</div></div>
+        <div class="stat"><div class="stat-number">🍱 150+</div><div class="stat-label">천년의 맛을 잇는 로컬 푸드</div></div>
+        <div class="stat"><div class="stat-number">✨4 Weeks</div><div class="stat-label">매주 펼쳐지는 달빛 축제</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="spots" class="spots">
+    <div class="spots-header">
+      <p class="section-label">Must-Visit</p>
+      <h2 class="spots-title">꼭 가봐야 할 달빛 체험</h2>
+    </div>
+    <div class="spots-grid">
+      <div class="spot-card">
+        <img class="spot-img" src="imgs/01.JPG" alt="메인거리"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">달빛 로드</p>
+          <h3 class="spot-name">달빛 메인거리</h3>
+          <p class="spot-desc">황홀한 조명 아래 펼쳐지는 야시장의 심장부. 남도의 미식과 활기찬 에너지가 가득한 메인 스트리트입니다.</p>
+        </div>
+      </div>
+      <div class="spot-card">
+        <img class="spot-img" src="imgs/03.JPG" alt="쉼터"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">시장 중심 쉼터</p>
+          <h3 class="spot-name">전통의 문</h3>
+          <p class="spot-desc">천년의 시간을 품은 고풍스러운 한옥 아래서 무등산 밤바람과 함께 과거로 떠나는 낭만적인 산책을 시작해 보세요.</p>
+        </div>
+      </div>
+      <div class="spot-card">
+        <img class="spot-img" src="imgs/02.JPG" alt="야외 식사처"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">별빛 피크닉</p>
+          <h3 class="spot-name">별빛 피크닉</h3>
+          <p class="spot-desc">무등산 실루엣을 배경으로 즐기는 야외 만찬. 소중한 사람들과 시원한 수제 맥주 한 잔에 담긴 여유를 만끽하세요.</p>
+        </div>
+      </div>
+      <div class="spot-card">
+        <img class="spot-img" src="imgs/04.JPG" alt="공예 체험"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">전통 공예 체험 존</p>
+          <h3 class="spot-name">달빛 공방</h3>
+          <p class="spot-desc">장인의 손길이 닿은 전통 공예품부터 직접 만들어보는 체험까지, 광주의 예술적 감성을 손끝으로 느껴보는 시간입니다.</p>
+        </div>
+      </div>
+      <div class="spot-card">
+        <img class="spot-img" src="imgs/05.JPG" alt="버스킹 무대"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">달빛 버스킹 무대</p>
+          <h3 class="spot-name">낭만 버스킹</h3>
+          <p class="spot-desc">밤하늘을 수놓는 감미로운 선율. 로컬 아티스트들이 전하는 음악의 울림이 달빛 아래 가득 채워집니다.</p>
+        </div>
+      </div>
+            <div class="spot-card">
+        <img class="spot-img" src="imgs/05.JPG" alt="푸드존"/>
+        <div class="spot-overlay"></div>
+        <div class="spot-info">
+          <p class="spot-category">미식 천국</p>
+          <h3 class="spot-name">미식 천국</h3>
+          <p class="spot-desc">'홍어삼합, 무등산막걸리' 등 남도 대표 미식을 한곳에서! 입안 가득 퍼지는 맛의 축제가 야시장의 밤을 더 풍요롭게 합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ============================================
+       💡 [수정] 여행 팁 섹션
+       - tips-title: 섹션 제목
+       - 각 tip-item: 번호, 제목, 내용 수정
+       - 항목을 복사해서 추가하거나 삭제 가능
+       ============================================ -->
+  <section class="tips">
+    <div class="tips-header">
+      <p class="section-label">Travel Tips</p>
+      <!-- ✏️ 팁 섹션 제목 -->
+      <h2 class="tips-title">🌙 무등산 달빛 야시장 <br/>방문 전 알아두면 좋은 것들</h2>
+    </div>
+
+    <div class="tips-grid">
+
+      <!-- ✏️ 팁 1 -->
+      <div class="tip-item">
+        <div class="tip-number">01. 운영 시간 및 시기</div>
+        <!-- ✏️ 팁 제목 -->
+        <p class="tip-title">🗓️ 매주 토, 일요일 운영</p>
+        <!-- ✏️ 팁 내용 -->
+        <p class="tip-text">
+          달빛이 가장 아름다운 매주 주말 저녁 6시부터 밤 11시까지 열립니다. 특히 무등산 산바람이 시원한 4월부터 10월까지가 야시장을 즐기기에 가장 완벽한 시즌입니다.
+        </p>
+      </div>
+
+      <!-- ✏️ 팁 2 -->
+      <div class="tip-item">
+        <div class="tip-number">02. 교통 및 주차</div>
+        <p class="tip-title">🚌 대중교통 권장</p>
+        <p class="tip-text">
+          광주 시내에서 버스나 택시로 편리하게 이동 가능합니다. 축제 기간에는 주차 공간이 혼잡할 수 있으니, 인근 공영 주차장을 미리 확인하거나 대중교통을 이용해 여유롭게 방문하시는 것을 추천합니다.
+        </p>
+      </div>
+
+      <!-- ✏️ 팁 3 -->
+      <div class="tip-item">
+        <div class="tip-number">03. 놓치지 말아야 할 맛</div>
+        <p class="tip-title">🍱 남도 로컬 푸드</p>
+        <p class="tip-text">
+          광주 5미(味)를 재해석한 '홍어삼합'과 무등산 수박 에이드는 이곳의 시그니처입니다. 150여 가지가 넘는 풍성한 길거리 음식을 즐기려면 가벼운 옷차림과 넉넉한 배려심은 필수입니다.
+        </p>
+      </div>
+
+      <!-- ✏️ 팁 4 -->
+      <div class="tip-item">
+        <div class="tip-number">04. 즐길거리 명소</div>
+        <p class="tip-title">🎸 달빛 버스킹 & 포토존</p>
+        <p class="tip-text">
+          중앙 광장에서 펼쳐지는 로컬 아티스트들의 버스킹은 밤 8시에 시작됩니다. 야시장 곳곳에 설치된 은하수 조명을 배경으로 인생 사진을 남겨보세요. 무등산 실루엣과 달무리가 어우러진 야경은 놓칠 수 없는 백미입니다.
+        </p>
+      </div>
+
+      <!-- ✏️ 팁을 여기에 복사해서 추가할 수 있어요! -->
+
+    </div>
+  </section>
+
+
+
+  <section id="cta" class="cta">
+    <div class="cta-inner">
+      <h2 class="cta-title">지금 바로<br/><em>무등산 달빛 야시장으로 go!!</em></h2>
+      <p class="cta-sub">달빛 가득한 추억이 당신을 기다립니다</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary">여행 패키지 보기</a>
+        <a href="#" class="btn btn-ghost">문의하기</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-brand">Gwangjoo Travel</span>
+    <span class="footer-copy">© 2025 무등산 달빛 야시장 가이드 — 만든 이: 홍길동</span>
+  </footer>
+
+</body>
+</html>
